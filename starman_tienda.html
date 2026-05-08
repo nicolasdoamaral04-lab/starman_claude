@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.31.0/iconfont/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --color-background-primary:#fff;
+  --color-background-secondary:#f5f5f5;
+  --color-border-secondary:#ddd;
+  --color-border-tertiary:#eee;
+  --color-text-primary:#1a1a1a;
+  --color-text-secondary:#555;
+  --color-text-tertiary:#999;
+  --border-radius-lg:12px;
+  --border-radius-md:8px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f8f8;padding:1rem;max-width:900px;margin:0 auto;}
+
+/* TABS NAV */
+.top-nav{display:flex;gap:6px;margin-bottom:1.2rem;background:#fff;border:0.5px solid #ddd;border-radius:var(--border-radius-lg);padding:6px;}
+.top-nav button{flex:1;padding:8px 10px;border:none;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer;background:transparent;color:#555;transition:all 0.2s;}
+.top-nav button.active{background:#1a1a2e;color:#fff;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#2d2d4e 100%);color:white;padding:2rem 2rem;text-align:center;border-radius:var(--border-radius-lg);margin-bottom:1.5rem;}
+.hero-logo{font-size:26px;font-weight:500;}
+.hero-logo span{color:#f5a623;}
+.hero-tagline{font-size:13px;color:#aaa;margin-top:5px;}
+.hero-actions{margin-top:1.2rem;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.btn-hero{background:#f5a623;color:#1a1a2e;border:none;padding:9px 20px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer;}
+.btn-hero-sec{background:transparent;color:white;border:1px solid rgba(255,255,255,0.3);padding:9px 20px;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;}
+
+/* CATALOG */
+.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:10px;}
+.search-bar{display:flex;align-items:center;gap:8px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:7px 12px;flex:1;max-width:260px;}
+.search-bar input{border:none;background:transparent;font-size:14px;color:var(--color-text-primary);outline:none;width:100%;}
+.cart-btn{position:relative;background:transparent;border:0.5px solid var(--color-border-secondary);padding:7px 14px;border-radius:var(--border-radius-md);cursor:pointer;font-size:14px;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
+.cart-badge{background:#f5a623;color:#1a1a2e;font-size:11px;font-weight:500;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;}
+.cats{display:flex;gap:8px;margin-bottom:1.2rem;flex-wrap:wrap;}
+.cat-btn{padding:5px 13px;border-radius:20px;font-size:13px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);}
+.cat-btn.active{background:#1a1a2e;color:white;border-color:#1a1a2e;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:12px;}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;}
+.card-img{background:var(--color-background-secondary);height:90px;display:flex;align-items:center;justify-content:center;font-size:38px;}
+.card-body{padding:10px 12px 12px;}
+.card-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px;line-height:1.3;}
+.card-brand{font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px;}
+.price-row{display:flex;flex-direction:column;gap:2px;margin-bottom:8px;}
+.price-lista{font-size:11px;color:var(--color-text-tertiary);text-decoration:line-through;}
+.price-efectivo{font-size:14px;font-weight:500;color:#2e7d32;}
+.price-desc{font-size:10px;color:#2e7d32;background:#e8f5e9;padding:1px 6px;border-radius:8px;display:inline-block;margin-left:4px;}
+.add-btn{width:100%;background:#f5a623;border:none;color:#1a1a2e;padding:7px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;}
+.add-btn:active{transform:scale(0.97);}
+.badge-new{background:#e8f5e9;color:#2e7d32;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500;display:inline-block;margin-bottom:5px;}
+.badge-sale{background:#fff3e0;color:#e65100;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500;display:inline-block;margin-bottom:5px;}
+.no-results{text-align:center;color:var(--color-text-secondary);padding:2rem;font-size:14px;}
+
+/* CART */
+.cart-panel{display:none;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-top:1.5rem;}
+.cart-panel.open{display:block;}
+.cart-title{font-size:16px;font-weight:500;margin-bottom:1rem;color:var(--color-text-primary);display:flex;align-items:center;gap:8px;}
+.cart-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px;gap:8px;}
+.cart-item-name{color:var(--color-text-primary);font-weight:500;font-size:13px;}
+.cart-item-sub{color:var(--color-text-tertiary);font-size:11px;margin-top:1px;}
+.qty-ctrl{display:flex;align-items:center;gap:6px;}
+.qty-btn{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);width:24px;height:24px;border-radius:4px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--color-text-primary);}
+.remove-btn{background:transparent;border:none;color:var(--color-text-tertiary);cursor:pointer;padding:2px 4px;}
+.pago-section{margin-top:1.25rem;padding-top:1.25rem;border-top:0.5px solid var(--color-border-tertiary);}
+.pago-title{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;}
+.pago-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.pago-opt{border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:10px 12px;cursor:pointer;}
+.pago-opt.selected{border:2px solid #f5a623;background:#fff8ed;}
+.pago-opt-name{font-size:13px;font-weight:500;color:var(--color-text-primary);}
+.pago-opt-desc{font-size:11px;color:var(--color-text-secondary);margin-top:2px;}
+.pago-opt-price{font-size:13px;font-weight:500;margin-top:6px;}
+.resumen-section{margin-top:1.25rem;padding-top:1.25rem;border-top:0.5px solid var(--color-border-tertiary);}
+.resumen-row{display:flex;justify-content:space-between;font-size:13px;color:var(--color-text-secondary);margin-bottom:5px;}
+.resumen-total{display:flex;justify-content:space-between;font-size:16px;font-weight:500;color:var(--color-text-primary);margin-top:8px;padding-top:8px;border-top:0.5px solid var(--color-border-tertiary);}
+.wa-btn{width:100%;margin-top:1rem;padding:13px;background:#25D366;color:white;border:none;border-radius:var(--border-radius-md);font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.wa-btn:hover{background:#1ebe5d;}
+.empty-cart{text-align:center;color:var(--color-text-tertiary);font-size:14px;padding:1.5rem 0;}
+.pago-warn{font-size:12px;color:#e65100;background:#fff3e0;padding:8px 12px;border-radius:var(--border-radius-md);margin-top:10px;display:none;}
+.pago-warn.visible{display:block;}
+
+/* NOSOTROS */
+.nosotros-page{display:none;}
+.nosotros-page.active{display:block;}
+.section-card{background:#fff;border:0.5px solid #eee;border-radius:var(--border-radius-lg);padding:1.5rem;margin-bottom:1rem;}
+.section-card h3{font-size:15px;font-weight:600;color:#1a1a2e;margin-bottom:0.75rem;display:flex;align-items:center;gap:8px;}
+.section-card p{font-size:13px;color:#555;line-height:1.6;}
+.valores-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:0.5rem;}
+.valor-item{background:#f8f8ff;border:0.5px solid #e0e0f0;border-radius:var(--border-radius-md);padding:12px;}
+.valor-item .v-icon{font-size:22px;margin-bottom:6px;}
+.valor-item .v-title{font-size:13px;font-weight:600;color:#1a1a2e;}
+.valor-item .v-desc{font-size:12px;color:#666;margin-top:3px;}
+
+/* CONTACTO */
+.contacto-page{display:none;}
+.contacto-page.active{display:block;}
+.contact-hero{background:linear-gradient(135deg,#1a1a2e,#2d2d4e);color:#fff;border-radius:var(--border-radius-lg);padding:1.5rem;text-align:center;margin-bottom:1rem;}
+.contact-hero h2{font-size:18px;font-weight:600;margin-bottom:6px;}
+.contact-hero p{font-size:13px;color:#aaa;}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;}
+.contact-card{background:#fff;border:0.5px solid #eee;border-radius:var(--border-radius-lg);padding:1.25rem;display:flex;align-items:flex-start;gap:12px;}
+.contact-card .cc-icon{width:40px;height:40px;border-radius:50%;background:#fff8ed;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.contact-card .cc-label{font-size:11px;color:#999;margin-bottom:3px;}
+.contact-card .cc-val{font-size:13px;font-weight:500;color:#1a1a1a;line-height:1.4;}
+.wa-contact-btn{width:100%;padding:14px;background:#25D366;color:#fff;border:none;border-radius:var(--border-radius-md);font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:1rem;}
+.wa-contact-btn:hover{background:#1ebe5d;}
+.mapa-placeholder{background:#f0f0f0;border-radius:var(--border-radius-lg);height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#777;font-size:13px;border:0.5px solid #ddd;}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:#1a1a2e;color:white;padding:10px 18px;border-radius:var(--border-radius-md);font-size:13px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;}
+
+/* FOOTER */
+.footer-bar{margin-top:2rem;border-top:0.5px solid var(--color-border-tertiary);padding-top:1.25rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--color-text-tertiary);}
+
+/* LOGO img */
+.hero-logo-img{height:56px;object-fit:contain;margin-bottom:8px;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.4));}
+
+@media(max-width:480px){
+  .contact-grid{grid-template-columns:1fr;}
+  .valores-grid{grid-template-columns:1fr;}
+  .pago-opts{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV TABS -->
+<div class="top-nav">
+  <button class="active" onclick="showTab('tienda',this)"><i class="ti ti-tool" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Tienda</button>
+  <button onclick="showTab('nosotros',this)"><i class="ti ti-star" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Nosotros</button>
+  <button onclick="showTab('contacto',this)"><i class="ti ti-phone" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Contacto</button>
+</div>
+
+<!-- ===== TIENDA ===== -->
+<div id="tab-tienda">
+
+<div class="hero">
+  <img src="https://i.imgur.com/placeholder.png" id="logo-img" class="hero-logo-img" alt="Starman logo" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block'"/>
+  <div id="logo-fallback" style="display:none" class="hero-logo">⭐ Starman <span>Herramientas</span> & Neumáticos</div>
+  <div class="hero-tagline">Todo lo que tu taller necesita — calidad garantizada</div>
+  <div class="hero-actions">
+    <button class="btn-hero" onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">Ver catálogo</button>
+    <button class="btn-hero-sec" onclick="sendPrompt('¿Qué herramientas me recomendás para un taller mecánico básico?')">Asesoramiento ↗</button>
+  </div>
+</div>
+
+<div class="nav">
+  <span style="font-size:15px;font-weight:500;color:var(--color-text-primary)">Catálogo</span>
+  <div class="search-bar">
+    <i class="ti ti-search" style="font-size:16px;color:var(--color-text-tertiary)"></i>
+    <input type="text" id="search" placeholder="Buscar producto..." oninput="renderProducts()"/>
+  </div>
+  <button class="cart-btn" onclick="toggleCart()">
+    <i class="ti ti-shopping-cart" style="font-size:18px"></i>
+    Carrito
+    <span class="cart-badge" id="cart-count">0</span>
+  </button>
+</div>
+
+<div class="cats" id="cats"></div>
+<div class="grid" id="catalogo"></div>
+
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-title"><i class="ti ti-shopping-cart" style="font-size:18px"></i> Tu carrito</div>
+  <div id="cart-items"></div>
+  <div id="cart-footer" style="display:none">
+    <div class="pago-section">
+      <div class="pago-title"><i class="ti ti-credit-card" style="font-size:15px;vertical-align:-2px;margin-right:5px"></i>Elegí cómo pagás</div>
+      <div class="pago-opts" id="pago-opts"></div>
+      <div class="pago-warn" id="pago-warn"><i class="ti ti-alert-circle" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Seleccioná un método de pago para continuar</div>
+    </div>
+    <div class="resumen-section">
+      <div class="resumen-row"><span>Subtotal (precio de lista)</span><span id="sub-lista"></span></div>
+      <div class="resumen-row" id="desc-row" style="display:none"><span id="desc-label"></span><span id="desc-val" style="color:#2e7d32"></span></div>
+      <div class="resumen-total"><span>Total a pagar</span><span id="total-final"></span></div>
+    </div>
+    <button class="wa-btn" onclick="enviarWA()">
+      <i class="ti ti-brand-whatsapp" style="font-size:18px"></i>
+      Enviar pedido por WhatsApp
+    </button>
+  </div>
+</div>
+
+</div><!-- /tab-tienda -->
+
+<!-- ===== NOSOTROS ===== -->
+<div id="tab-nosotros" class="nosotros-page">
+
+  <div class="hero" style="margin-bottom:1rem;">
+    <div class="hero-logo">⭐ Starman <span>Herramientas</span> & Neumáticos</div>
+    <div class="hero-tagline" style="margin-top:8px;font-size:14px;color:#ccc;">Tu aliado en Oberá, Misiones</div>
+  </div>
+
+  <div class="section-card">
+    <h3><i class="ti ti-building-store" style="color:#f5a623"></i> ¿Quiénes somos?</h3>
+    <p>Somos <strong>Starman Herramientas & Neumáticos</strong>, una empresa familiar con base en Oberá, Misiones. Nacimos con la misión de brindar a talleres mecánicos, profesionales y particulares acceso a herramientas de calidad y neumáticos de las mejores marcas, a precios competitivos y con atención personalizada.</p>
+  </div>
+
+  <div class="section-card">
+    <h3><i class="ti ti-target" style="color:#f5a623"></i> Nuestra misión</h3>
+    <p>Ser el proveedor de referencia en la región de Misiones, ofreciendo productos confiables, asesoramiento honesto y una experiencia de compra simple y directa — sea en persona o por WhatsApp.</p>
+  </div>
+
+  <div class="section-card">
+    <h3><i class="ti ti-heart" style="color:#f5a623"></i> Nuestros valores</h3>
+    <div class="valores-grid">
+      <div class="valor-item">
+        <div class="v-icon">🏆</div>
+        <div class="v-title">Calidad</div>
+        <div class="v-desc">Solo trabajamos con marcas reconocidas y probadas.</div>
+      </div>
+      <div class="valor-item">
+        <div class="v-icon">🤝</div>
+        <div class="v-title">Confianza</div>
+        <div class="v-desc">Precios claros, sin sorpresas ni letras chicas.</div>
+      </div>
+      <div class="valor-item">
+        <div class="v-icon">⚡</div>
+        <div class="v-title">Agilidad</div>
+        <div class="v-desc">Respondemos rápido y entregamos cuando lo necesitás.</div>
+      </div>
+      <div class="valor-item">
+        <div class="v-icon">📍</div>
+        <div class="v-title">Cercanía</div>
+        <div class="v-desc">Locales y comprometidos con nuestra comunidad.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <h3><i class="ti ti-packages" style="color:#f5a623"></i> Lo que ofrecemos</h3>
+    <p>Contamos con un amplio catálogo que incluye <strong>llaves y destornilladores</strong> de marcas como Stanley, Bahco y Tramontina; <strong>herramientas eléctricas</strong> de Bosch, Makita y Black+Decker; <strong>neumáticos</strong> Fate, Bridgestone y Michelin; y <strong>equipamiento de taller</strong> completo. Siempre con descuento por pago en efectivo o transferencia.</p>
+  </div>
+
+</div><!-- /tab-nosotros -->
+
+<!-- ===== CONTACTO ===== -->
+<div id="tab-contacto" class="contacto-page">
+
+  <div class="contact-hero">
+    <h2>📞 Contactanos</h2>
+    <p>Estamos listos para ayudarte. Escribinos por WhatsApp o visitanos en Oberá.</p>
+  </div>
+
+  <div class="contact-grid">
+    <div class="contact-card">
+      <div class="cc-icon"><i class="ti ti-brand-whatsapp" style="font-size:20px;color:#25D366"></i></div>
+      <div>
+        <div class="cc-label">WhatsApp / Teléfono</div>
+        <div class="cc-val">+54 9 3755 20-5376</div>
+      </div>
+    </div>
+    <div class="contact-card">
+      <div class="cc-icon"><i class="ti ti-clock" style="font-size:20px;color:#f5a623"></i></div>
+      <div>
+        <div class="cc-label">Horario de atención</div>
+        <div class="cc-val">Lun – Sáb<br>8:00 a 18:00 hs</div>
+      </div>
+    </div>
+    <div class="contact-card">
+      <div class="cc-icon"><i class="ti ti-map-pin" style="font-size:20px;color:#e53935"></i></div>
+      <div>
+        <div class="cc-label">Ubicación</div>
+        <div class="cc-val">Oberá, Misiones<br>Argentina</div>
+      </div>
+    </div>
+    <div class="contact-card">
+      <div class="cc-icon"><i class="ti ti-cash" style="font-size:20px;color:#2e7d32"></i></div>
+      <div>
+        <div class="cc-label">Descuento disponible</div>
+        <div class="cc-val">10% efectivo<br>o transferencia</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="wa-contact-btn" onclick="abrirWAContacto()">
+    <i class="ti ti-brand-whatsapp" style="font-size:20px"></i>
+    Escribinos por WhatsApp ahora
+  </button>
+
+  <div class="mapa-placeholder">
+    <i class="ti ti-map-2" style="font-size:32px;color:#bbb"></i>
+    <span>Oberá, Misiones — Argentina</span>
+    <span style="font-size:11px;color:#aaa">Consultanos la dirección exacta por WhatsApp</span>
+  </div>
+
+</div><!-- /tab-contacto -->
+
+<div class="footer-bar">
+  <div style="display:flex;flex-direction:column;gap:4px;">
+    <span><i class="ti ti-map-pin" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Oberá, Misiones</span>
+    <span><i class="ti ti-brand-whatsapp" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>+54 9 3755 20-5376</span>
+    <span><i class="ti ti-clock" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Lun–Sáb 8:00 – 18:00</span>
+  </div>
+  <span>© 2026 Starman Herramientas & Neumáticos</span>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const WA_NUM = "5493755205376";
+const DESCUENTO = 0.10;
+
+const metodosPago = [
+  { id:"efectivo",     nombre:"Efectivo",      desc:`${DESCUENTO*100}% de descuento`, icon:"ti-cash",           descuento:DESCUENTO },
+  { id:"transferencia",nombre:"Transferencia", desc:`${DESCUENTO*100}% de descuento`, icon:"ti-building-bank",  descuento:DESCUENTO },
+  { id:"debito",       nombre:"Débito",        desc:"Precio de lista",                icon:"ti-credit-card",    descuento:0 },
+  { id:"credito",      nombre:"Crédito",       desc:"Precio de lista",                icon:"ti-cards",          descuento:0 },
+];
+
+const products = [
+  { id:1,  name:'Llave de torque 3/8"',       brand:"Stanley",       precioLista:18500, cat:"Llaves",          emoji:"🔧", badge:"new" },
+  { id:2,  name:"Set llaves combinadas 8-19mm",brand:"Bahco",         precioLista:24900, cat:"Llaves",          emoji:"🔩", badge:null },
+  { id:3,  name:'Llave inglesa 12"',           brand:"Tramontina",    precioLista:7200,  cat:"Llaves",          emoji:"🔧", badge:null },
+  { id:4,  name:"Destornillador estrella PH2", brand:"Stanley",       precioLista:2800,  cat:"Destornilladores",emoji:"🪛", badge:null },
+  { id:5,  name:"Set destornilladores x6",     brand:"Black+Decker",  precioLista:8900,  cat:"Destornilladores",emoji:"🪛", badge:"sale" },
+  { id:6,  name:"Destornillador de impacto",   brand:"Bosch",         precioLista:31500, cat:"Destornilladores",emoji:"⚡", badge:"new" },
+  { id:7,  name:"Amoladora angular 115mm",     brand:"Bosch",         precioLista:45000, cat:"Eléctricas",      emoji:"⚙️", badge:null },
+  { id:8,  name:"Taladro percutor 750W",       brand:"Makita",        precioLista:62000, cat:"Eléctricas",      emoji:"🔌", badge:"new" },
+  { id:9,  name:"Caladora eléctrica 550W",     brand:"Black+Decker",  precioLista:38000, cat:"Eléctricas",      emoji:"⚡", badge:null },
+  { id:10, name:"Neumático 175/70 R13",        brand:"Fate",          precioLista:28000, cat:"Neumáticos",      emoji:"🔵", badge:null },
+  { id:11, name:"Neumático 185/65 R15",        brand:"Bridgestone",   precioLista:42000, cat:"Neumáticos",      emoji:"🔵", badge:"sale" },
+  { id:12, name:"Neumático 195/55 R16",        brand:"Michelin",      precioLista:58000, cat:"Neumáticos",      emoji:"🔵", badge:null },
+  { id:13, name:"Gato hidráulico 2 ton",       brand:"Truper",        precioLista:19800, cat:"Equipamiento",    emoji:"🏗️", badge:null },
+  { id:14, name:'Caja de herramientas 16"',    brand:"Stanley",       precioLista:15200, cat:"Equipamiento",    emoji:"🧰", badge:"new" },
+  { id:15, name:"Linterna LED recargable",     brand:"Maglite",       precioLista:6400,  cat:"Equipamiento",    emoji:"🔦", badge:null },
+  { id:16, name:"Medidor presión neumáticos",  brand:"Truper",        precioLista:4200,  cat:"Neumáticos",      emoji:"📏", badge:null },
+];
+
+const categories = ["Todos", ...new Set(products.map(p => p.cat))];
+let activecat = "Todos";
+let cart = {};
+let metodoPago = null;
+
+// TAB SWITCHING
+function showTab(tab, btn) {
+  ["tienda","nosotros","contacto"].forEach(t => {
+    const el = document.getElementById("tab-"+t);
+    if(t==="tienda") el.style.display = t===tab?"block":"none";
+    else { el.classList.remove("active"); if(t===tab) el.classList.add("active"); }
+  });
+  document.querySelectorAll(".top-nav button").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+}
+// init
+document.getElementById("tab-nosotros").style.display="";
+document.getElementById("tab-contacto").style.display="";
+
+function fmt(n){ return "$" + Math.round(n).toLocaleString("es-AR"); }
+
+function renderCats(){
+  document.getElementById("cats").innerHTML = categories.map(c =>
+    `<button class="cat-btn${c===activecat?" active":""}" onclick="setcat('${c}')">${c}</button>`
+  ).join("");
+}
+function setcat(c){ activecat=c; renderCats(); renderProducts(); }
+
+function renderProducts(){
+  const q = document.getElementById("search").value.toLowerCase();
+  let list = products.filter(p => {
+    const mc = activecat==="Todos" || p.cat===activecat;
+    const mq = !q || p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q);
+    return mc && mq;
+  });
+  const el = document.getElementById("catalogo");
+  if(!list.length){ el.innerHTML='<div class="no-results">No se encontraron productos.</div>'; return; }
+  el.innerHTML = list.map(p => {
+    const pEf = Math.round(p.precioLista*(1-DESCUENTO));
+    return `<div class="card">
+      <div class="card-img">${p.emoji}</div>
+      <div class="card-body">
+        ${p.badge==="new"?'<span class="badge-new">Nuevo</span>':p.badge==="sale"?'<span class="badge-sale">Oferta</span>':""}
+        <div class="card-name">${p.name}</div>
+        <div class="card-brand">${p.brand}</div>
+        <div class="price-row">
+          <span class="price-lista">Lista: ${fmt(p.precioLista)}</span>
+          <span class="price-efectivo">Ef./transf.: ${fmt(pEf)}<span class="price-desc">-${DESCUENTO*100}%</span></span>
+        </div>
+        <button class="add-btn" onclick="addToCart(${p.id})">
+          <i class="ti ti-shopping-cart-plus" style="font-size:15px"></i> Agregar
+        </button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function addToCart(id){
+  cart[id]=(cart[id]||0)+1;
+  updateCartCount();
+  const p=products.find(x=>x.id===id);
+  showToast(`${p.name} agregado`);
+  if(document.getElementById("cart-panel").classList.contains("open")) renderCart();
+}
+function updateCartCount(){
+  document.getElementById("cart-count").textContent = Object.values(cart).reduce((a,b)=>a+b,0);
+}
+function toggleCart(){
+  document.getElementById("cart-panel").classList.toggle("open");
+  if(document.getElementById("cart-panel").classList.contains("open")) renderCart();
+}
+function renderCart(){
+  const keys=Object.keys(cart).filter(k=>cart[k]>0);
+  const el=document.getElementById("cart-items");
+  const footer=document.getElementById("cart-footer");
+  if(!keys.length){
+    el.innerHTML='<div class="empty-cart"><i class="ti ti-shopping-cart-off" style="font-size:24px;display:block;margin:0 auto 8px"></i>Tu carrito está vacío</div>';
+    footer.style.display="none"; return;
+  }
+  el.innerHTML=keys.map(k=>{
+    const p=products.find(x=>x.id==k);
+    return `<div class="cart-item">
+      <div style="flex:1;min-width:0">
+        <div class="cart-item-name">${p.name}</div>
+        <div class="cart-item-sub">${p.brand} · Lista: ${fmt(p.precioLista)} · Ef/transf: ${fmt(p.precioLista*(1-DESCUENTO))}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <div class="qty-ctrl">
+          <button class="qty-btn" onclick="changeQty(${k},-1)">−</button>
+          <span style="font-size:13px;min-width:16px;text-align:center">${cart[k]}</span>
+          <button class="qty-btn" onclick="changeQty(${k},1)">+</button>
+        </div>
+        <button class="remove-btn" onclick="removeItem(${k})"><i class="ti ti-trash" style="font-size:15px"></i></button>
+      </div>
+    </div>`;
+  }).join("");
+  footer.style.display="block";
+  renderPagoOpts(); renderResumen();
+}
+function renderPagoOpts(){
+  document.getElementById("pago-opts").innerHTML=metodosPago.map(m=>{
+    const total=calcTotal(m.descuento);
+    const sel=metodoPago===m.id;
+    return `<div class="pago-opt${sel?" selected":""}" onclick="selPago('${m.id}')">
+      <div style="display:flex;align-items:center;gap:6px">
+        <i class="ti ${m.icon}" style="font-size:16px;color:${m.descuento>0?'#2e7d32':'var(--color-text-secondary)'}"></i>
+        <span class="pago-opt-name">${m.nombre}</span>
+        ${sel?'<i class="ti ti-circle-check" style="font-size:14px;color:#f5a623;margin-left:auto"></i>':''}
+      </div>
+      <div class="pago-opt-desc">${m.desc}</div>
+      <div class="pago-opt-price" style="color:${m.descuento>0?'#2e7d32':'var(--color-text-primary)'}">${fmt(total)}</div>
+    </div>`;
+  }).join("");
+}
+function selPago(id){ metodoPago=id; document.getElementById("pago-warn").classList.remove("visible"); renderPagoOpts(); renderResumen(); }
+function calcTotal(desc){ return Object.keys(cart).filter(k=>cart[k]>0).reduce((s,k)=>{ const p=products.find(x=>x.id==k); return s+Math.round(p.precioLista*(1-desc))*cart[k]; },0); }
+function renderResumen(){
+  const tl=calcTotal(0);
+  document.getElementById("sub-lista").textContent=fmt(tl);
+  const m=metodosPago.find(x=>x.id===metodoPago);
+  const dr=document.getElementById("desc-row");
+  if(m&&m.descuento>0){
+    const ahorro=tl-calcTotal(m.descuento);
+    document.getElementById("desc-label").textContent=`Descuento ${m.nombre} (${m.descuento*100}%)`;
+    document.getElementById("desc-val").textContent=`- ${fmt(ahorro)}`;
+    dr.style.display="flex";
+    document.getElementById("total-final").textContent=fmt(calcTotal(m.descuento));
+  } else {
+    dr.style.display="none";
+    document.getElementById("total-final").textContent=m?fmt(calcTotal(m.descuento)):fmt(tl);
+  }
+}
+function changeQty(id,delta){ cart[id]=Math.max(0,(cart[id]||0)+delta); if(cart[id]===0) delete cart[id]; updateCartCount(); renderCart(); }
+function removeItem(id){ delete cart[id]; updateCartCount(); renderCart(); }
+
+function enviarWA(){
+  if(!metodoPago){ document.getElementById("pago-warn").classList.add("visible"); return; }
+  const m=metodosPago.find(x=>x.id===metodoPago);
+  const keys=Object.keys(cart).filter(k=>cart[k]>0);
+  const tl=calcTotal(0); const tf=calcTotal(m.descuento); const ahorro=tl-tf;
+  let lineas=keys.map(k=>{
+    const p=products.find(x=>x.id==k);
+    const pu=Math.round(p.precioLista*(1-m.descuento));
+    return `• ${cart[k]}x ${p.name} (${p.brand}) — ${fmt(pu)} c/u = ${fmt(pu*cart[k])}`;
+  }).join("\n");
+  let msg=`¡Hola Starman! 👋 Quisiera hacer el siguiente pedido:\n\n${lineas}\n\n`;
+  msg+=`💳 Método de pago: *${m.nombre}*\n`;
+  if(m.descuento>0) msg+=`💰 Descuento aplicado (${m.descuento*100}%): -${fmt(ahorro)}\n`;
+  msg+=`\n✅ *TOTAL A PAGAR: ${fmt(tf)}*\n\n¿Tienen stock disponible? ¡Gracias!`;
+  window.open(`https://wa.me/${WA_NUM}?text=${encodeURIComponent(msg)}`,"_blank");
+}
+
+function abrirWAContacto(){
+  const msg="¡Hola Starman! 👋 Me comunico desde la tienda online. ¿Me podés asesorar?";
+  window.open(`https://wa.me/${WA_NUM}?text=${encodeURIComponent(msg)}`,"_blank");
+}
+
+function showToast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2000); }
+
+// Load logo from uploaded file via data URL trick — use base64 embed placeholder
+// Since no real URL, we hide and show fallback
+document.getElementById("logo-img").style.display="none";
+document.getElementById("logo-fallback").style.display="block";
+
+renderCats(); renderProducts();
+</script>
+</body>
+</html>
